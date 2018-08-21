@@ -11,4 +11,4 @@ class Header extends React.Component {
   }
 }
 
-export default connect(null, { logout})(Header);
+export default connect(null, { logout })(Header);

@@ -25,9 +25,10 @@ export const login = (credentials) => async (dispatch) => {
   try {
     dispatch(loginRequest());
     const user = await api.auth.login(credentials);
-    dispatch(loginSuccess(user));
+    console.log(user)
+    return dispatch(loginSuccess(user));
   } catch(err) {
-    dispatch(loginFailure(err.message));
+    return dispatch(loginFailure(err.message));
   }
 };
 
@@ -46,8 +47,8 @@ export const logout = () => async (dispatch) => {
   try {
     dispatch(logoutRequest());
     await api.auth.logout();
-    dispatch(loginSuccess());
+    return dispatch(logoutSuccess());
   } catch(err) {
-    dispatch(logoutFailure(err.message));
+    return dispatch(logoutFailure(err.message));
   }
 }

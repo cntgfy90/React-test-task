@@ -45,6 +45,7 @@ class LoginPage extends React.Component {
 
   render() {
     const { data, errors } = this.state;
+    const { didInvalidate } = this.props;
     return (
       <div className="container login">
         <LoginForm
@@ -52,10 +53,15 @@ class LoginPage extends React.Component {
           handleChange={this.handleChange}
           data={data}
           errors={errors}
+          didInvalidate={didInvalidate}
         />
       </div>
     );
   }
 }
 
-export default connect(null, { login })(LoginPage);
+const mapStateToProps = (state) => ({
+  didInvalidate: state.auth.didInvalidate
+});
+
+export default connect(mapStateToProps, { login })(LoginPage);

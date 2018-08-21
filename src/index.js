@@ -17,8 +17,11 @@ ReactDOM.render(
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    console.log(user);
+    if (!window.localStorage.getItem('react-app-user')) {
+      window.localStorage.setItem('react-app-user', user.uid);
+    }
   } else {
+
   }
 })
 

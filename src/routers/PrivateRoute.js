@@ -4,12 +4,12 @@ import { Route, Redirect } from 'react-router-dom';
 import Header from '../components/smart/Header';
 
 export const PrivateRoute = ({
-  isAuthenticated,
+  user,
   component: Component,
   ...rest
 }) => (
     <Route {...rest} component={(props) => (
-      isAuthenticated ? (
+      user.uid ? ( // check isAuthenticated
         <div>
           <Header />
           <Component {...props} />
@@ -21,7 +21,7 @@ export const PrivateRoute = ({
   );
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: !!state.auth.user.uid
+  user: !!state.auth.user
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

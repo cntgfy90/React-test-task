@@ -18,7 +18,7 @@ const LoginForm = (props) => {
         />
         {
           props.errors.email && (
-            <div class="alert alert-danger" role="alert">{props.errors.email}</div>
+            <div className="alert alert-danger" role="alert">{props.errors.email}</div>
           )
         }
       </div>
@@ -35,7 +35,12 @@ const LoginForm = (props) => {
         />
         {
           props.errors.password && (
-            <div class="alert alert-danger" role="alert">{props.errors.password}</div>
+            <div className="alert alert-danger" role="alert">{props.errors.password}</div>
+          )
+        }
+        {
+          props.didInvalidate && (
+            <div className="alert alert-danger" role="alert">{props.didInvalidate}</div>
           )
         }
       </div>

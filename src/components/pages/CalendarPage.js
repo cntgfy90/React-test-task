@@ -10,4 +10,4 @@ class CalendarPage extends React.Component {
   }
 }
 
-export defualt CalendarPage;
+export default CalendarPage;

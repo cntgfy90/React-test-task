@@ -13,4 +13,4 @@ const AppRouter = (props) => (
   </Router>
 );
 
-export defualt AppRouter;
+export default AppRouter;

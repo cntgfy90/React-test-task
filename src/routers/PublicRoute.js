@@ -1,27 +1,24 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import Header from '../components/smart/Header';
 
 export const PublicRoute = ({
-  user,
+  auth,
   component: Component,
   ...rest
 }) => (
     <Route {...rest} component={(props) => (
-      user.uid ? ( // check isAuthenticated
-        <Redirect to="/calendar" />
+      !_.isEmpty(auth.user) ? (
+          <Redirect to="/calendar" />
       ) : (
-          <div>
-            <Header />
-            <Component {...props} />
-          </div>
+          <Component {...props} />
         )
     )} />
   );
 
 const mapStateToProps = (state) => ({
-  user: !!state.auth.user
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(PublicRoute);

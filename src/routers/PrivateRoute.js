@@ -1,19 +1,16 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import Header from '../components/smart/Header';
 
 export const PrivateRoute = ({
-  user,
+  auth,
   component: Component,
   ...rest
 }) => (
     <Route {...rest} component={(props) => (
-      user.uid ? ( // check isAuthenticated
-        <div>
-          <Header />
+      !_.isEmpty(auth.user) ? (
           <Component {...props} />
-        </div>
       ) : (
           <Redirect to="/login" />
         )
@@ -21,7 +18,7 @@ export const PrivateRoute = ({
   );
 
 const mapStateToProps = (state) => ({
-  user: !!state.auth.user
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

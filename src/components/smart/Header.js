@@ -10,18 +10,17 @@ class Header extends React.Component {
     e.preventDefault();
     this.props.logout()
       .then(() => {
-        window.localStorage.removeItem('react-app-user');
         history.push('/login');
       })
   }
 
   render() {
-    const { user, didInvalidate } = this.props;
+    const { auth } = this.props;
     return (
       <nav className="navbar navbar-dark bg-primary">
         <a className="navbar-brand">ReactApp</a>
         {
-          !_.isEmpty(user) ? (
+          !_.isEmpty(auth.user) ? (
             <button
               className="btn btn-outline-success my-2 my-sm-0"
               type="submit"
@@ -45,7 +44,7 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { logout })(Header);

@@ -2,6 +2,7 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  KEEP_USER_LOGGED_IN,
 
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
@@ -22,8 +23,10 @@ export default (state = initialState, action) => {
         isLoading: true
       };
     case LOGIN_SUCCESS:
+    case KEEP_USER_LOGGED_IN:
       const user = action.user;
       return {
+        ...state,
         isLoading: false,
         didInvalidate: false,
         user: {...user}
@@ -35,15 +38,11 @@ export default (state = initialState, action) => {
         didInvalidate: action.message
       };
     case LOGOUT_REQUEST:
-      return {};
+      return state;
     case LOGOUT_SUCCESS:
       return {};
     case LOGOUT_FAILURE:
-      return {
-        user: {},
-        isLoading: false,
-        didInvalidate: action.message
-      };
+      return state;
     default:
       return state;
   }

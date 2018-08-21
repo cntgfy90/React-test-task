@@ -15,15 +15,20 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    if (!window.localStorage.getItem('react-app-user')) {
-      window.localStorage.setItem('react-app-user', user.uid);
-    }
-  } else {
-
-  }
-})
+// firebase.auth().onAuthStateChanged((user) => {
+//   if (user) {
+//     const savedUser = JSON.stringify(window.localStorage.getItem('react-app-user'));
+//     console.log(savedUser, user);
+//     if (!savedUser) {
+//       window.localStorage.setItem('react-app-user', user.uid);
+//     }
+//     if (user.uid === savedUser) {
+//       // store.dispatch()
+//     }
+//   } else {
+//
+//   }
+// })
 
 registerServiceWorker();
 //testtest - password

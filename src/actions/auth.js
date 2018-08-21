@@ -2,6 +2,7 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  KEEP_USER_LOGGED_IN,
 
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
@@ -20,12 +21,16 @@ export const loginFailure = (message) => ({
   type: LOGIN_FAILURE,
   message
 });
+export const keepUserLoggedIn = (user) => ({
+  type: KEEP_USER_LOGGED_IN,
+  user
+});
 
 export const login = (credentials) => async (dispatch) => {
   try {
     dispatch(loginRequest());
     const user = await api.auth.login(credentials);
-    console.log(user)
+    dispatch(keepUserLoggedIn(user.uid));
     return dispatch(loginSuccess(user));
   } catch(err) {
     return dispatch(loginFailure(err.message));

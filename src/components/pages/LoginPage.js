@@ -1,5 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
+import { history } from '../../routers/AppRouter';
 import Validator from 'validator';
 import { login } from '../../actions/auth';
 // Components
@@ -16,16 +18,16 @@ class LoginPage extends React.Component {
       errors: {}
   };
 
-  submitForm = (e) => {
-    e.preventDefault();
-    const errors = this.validate(this.state.data);
-    this.setState(() => ({ errors }));
-    if (Object.keys(errors).length === 0) {
-      this.props.login(this.state.data).then((user) => {
-        console.log(user);
-      }).catch((err) => {
-        console.log(err)
-      })
+  submitForm = async (e) => {
+    try {
+      e.preventDefault();
+      const errors = this.validate(this.state.data);
+      this.setState(() => ({ errors }));
+      if (_.isEmpty(errors)) {
+        const user = await this.props.login(this.state.data);
+        history.push('/calendar');
+      }
+    } catch(err) {
     }
   }
 
@@ -45,7 +47,7 @@ class LoginPage extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-    const { didInvalidate } = this.props;
+    const { auth } = this.props;
     return (
       <div className="container login">
         <LoginForm
@@ -53,7 +55,7 @@ class LoginPage extends React.Component {
           handleChange={this.handleChange}
           data={data}
           errors={errors}
-          didInvalidate={didInvalidate}
+          didInvalidate={auth.didInvalidate && auth.didInvalidate}
         />
       </div>
     );
@@ -61,7 +63,7 @@ class LoginPage extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  didInvalidate: state.auth.didInvalidate
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { login })(LoginPage);

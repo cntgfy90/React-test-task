@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { firebase } from './firebase/firebase';
 import { login, logout } from './actions/auth';
+import { history } from './routers/AppRouter';
 import AppRouter from './routers/AppRouter';
 import { Provider } from 'react-redux';
 import store from './store/store';

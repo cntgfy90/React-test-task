@@ -6,12 +6,13 @@ import { logout } from '../../actions/auth';
 
 class Header extends React.Component {
 
-  handleLogout = (e) => {
-    e.preventDefault();
-    this.props.logout()
-      .then(() => {
-        history.push('/login');
-      })
+  handleLogout = async (e) => {
+    try {
+      e.preventDefault();
+      await this.props.logout();
+      history.push('/login');
+    } catch(err) {
+    }
   }
 
   render() {

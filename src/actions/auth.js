@@ -30,7 +30,6 @@ export const login = (credentials) => async (dispatch) => {
   try {
     dispatch(loginRequest());
     const user = await api.auth.login(credentials);
-    dispatch(keepUserLoggedIn(user.uid));
     return dispatch(loginSuccess(user));
   } catch(err) {
     return dispatch(loginFailure(err.message));

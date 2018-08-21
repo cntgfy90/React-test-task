@@ -1,7 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import _ from 'lodash';
 
 export const PublicRoute = ({
   auth,
@@ -17,8 +17,4 @@ export const PublicRoute = ({
     )} />
   );
 
-const mapStateToProps = (state) => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps)(PublicRoute);
+export default PublicRoute;

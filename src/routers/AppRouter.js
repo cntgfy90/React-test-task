@@ -1,9 +1,9 @@
 import React from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
 import { firebase } from '../firebase/firebase';
-import { keepUserLoggedIn } from '../actions/auth';
 import { connect } from 'react-redux';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { keepUserLoggedIn } from '../actions/auth';
+import createHistory from 'history/createBrowserHistory';
 // Routes
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
@@ -20,23 +20,21 @@ class AppRouter extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user)
-        this.props.keepUserLoggedIn(user)
-      } else {
-
+        this.props.keepUserLoggedIn(user);
       }
-    })
+    });
   }
 
   render() {
+    const { auth } = this.props;
     return (
       <Router history={history}>
         <div>
           <Header />
           <Switch>
-            <PublicRoute path="/login" component={LoginPage} exact={true} />
-            <PrivateRoute path="/calendar" component={CalendarPage} exact={true} />
-            <PublicRoute component={NotFoundPage} />
+            <PublicRoute path="/login" component={LoginPage} exact={true} auth={auth} />
+            <PrivateRoute path="/calendar" component={CalendarPage} exact={true} auth={auth} />
+            <PublicRoute component={NotFoundPage} auth={auth} />
           </Switch>
         </div>
       </Router>
@@ -44,8 +42,12 @@ class AppRouter extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  auth: state.auth
+});
+
 const mapDispatchToProps = (dispatch) => ({
   keepUserLoggedIn: (user) => dispatch(keepUserLoggedIn(user))
 });
 
-export default connect(null, mapDispatchToProps)(AppRouter);
+export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

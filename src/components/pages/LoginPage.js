@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Validator from 'validator';
-import { startLogin } from '../../actions/auth';
+import { login } from '../../actions/auth';
 // Components
 import LoginForm from '../forms/LoginForm';
 // Styles
@@ -21,7 +21,11 @@ class LoginPage extends React.Component {
     const errors = this.validate(this.state.data);
     this.setState(() => ({ errors }));
     if (Object.keys(errors).length === 0) {
-      this.props.startLogin(this.state.data);
+      this.props.login(this.state.data).then((user) => {
+        console.log(user);
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   }
 
@@ -54,4 +58,4 @@ class LoginPage extends React.Component {
   }
 }
 
-export default connect(null, { startLogin })(LoginPage);
+export default connect(null, { login })(LoginPage);

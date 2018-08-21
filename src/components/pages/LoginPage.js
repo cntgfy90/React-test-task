@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Validator from 'validator';
+import { startLogin } from '../../actions/auth';
 // Components
 import LoginForm from '../forms/LoginForm';
 // Styles
@@ -18,6 +20,9 @@ class LoginPage extends React.Component {
     e.preventDefault();
     const errors = this.validate(this.state.data);
     this.setState(() => ({ errors }));
+    if (Object.keys(errors).length === 0) {
+      this.props.startLogin(this.state.data);
+    }
   }
 
   handleChange = (e) => {
@@ -35,17 +40,18 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, errors } = this.state;
     return (
       <div className="container login">
         <LoginForm
           submitForm={this.submitForm}
           handleChange={this.handleChange}
           data={data}
+          errors={errors}
         />
       </div>
     );
   }
 }
 
-export default LoginPage;
+export default connect(null, { startLogin })(LoginPage);

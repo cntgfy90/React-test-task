@@ -14,6 +14,7 @@ const LoginForm = (props) => {
           placeholder="example@gmail.com"
           name="email"
           onChange={props.handleChange}
+          value={props.data.email}
         />
       </div>
       <div className="form-group">
@@ -25,6 +26,7 @@ const LoginForm = (props) => {
           name="password"
           placeholder="your password"
           onChange={props.handleChange}
+          value={props.data.password}
         />
       </div>
       <button

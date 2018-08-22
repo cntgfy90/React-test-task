@@ -3,6 +3,7 @@ import { firebase } from '../firebase/firebase';
 import { connect } from 'react-redux';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { keepUserLoggedIn } from '../actions/auth';
+import { fetchEvents } from '../actions/events';
 import createHistory from 'history/createBrowserHistory';
 // Routes
 import PublicRoute from './PublicRoute';
@@ -21,6 +22,7 @@ class AppRouter extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.props.keepUserLoggedIn(user);
+        this.props.fetchEvents();
       }
     });
   }
@@ -47,7 +49,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  keepUserLoggedIn: (user) => dispatch(keepUserLoggedIn(user))
+  keepUserLoggedIn: (user) => dispatch(keepUserLoggedIn(user)),
+  fetchEvents: () => dispatch(fetchEvents())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

@@ -8,8 +8,8 @@ export default {
       firebase.auth().signOut()
   },
   events: {
-    create: (uid, date) =>
-      firebase.database().ref(`users/${uid}/events`).push(date).then((ref) => ref.key),
+    create: (uid, data) =>
+      firebase.database().ref(`users/${uid}/events`).push(data).then((ref) => ref.key),
     fetch: (uid) =>
       firebase.database().ref(`users/${uid}/events`).once('value').then((snapshot) => {
         let events = [];

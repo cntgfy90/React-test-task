@@ -1,6 +1,9 @@
-import React from "react";
+import React from 'react';
+import { connect } from 'react-redux';
 import dateFns from "date-fns";
 import '../../styles/components/smart/Calendar.css';
+// Components
+import EventsForm from '../forms/EventsForm';
 
 class Calendar extends React.Component {
   state = {
@@ -62,6 +65,7 @@ class Calendar extends React.Component {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
+        console.log(this.props.events)
         const cloneDay = day;
         days.push(
           <div
@@ -93,7 +97,6 @@ class Calendar extends React.Component {
     this.setState({
       selectedDate: day
     });
-    console.log(this.state.selectedDate)
   };
 
   nextMonth = () => {
@@ -109,14 +112,22 @@ class Calendar extends React.Component {
   };
 
   render() {
+    const { selectedDate } = this.state;
     return (
       <div className="calendar">
         {this.renderHeader()}
         {this.renderDays()}
         {this.renderCells()}
+        <EventsForm
+          selectedDate={selectedDate}
+        />
       </div>
     );
   }
 }
 
-export default Calendar;
+const mapStateToProps = (state) => ({
+  events: state.events.items
+});
+
+export default connect(mapStateToProps)(Calendar);

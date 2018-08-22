@@ -1,28 +1,28 @@
 import {
-  CREATE_EVENT_REQUEST = 'CREATE_EVENT_REQUEST',
-  CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS',
-  CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE',
+  CREATE_EVENT_REQUEST,
+  CREATE_EVENT_SUCCESS,
+  CREATE_EVENT_FAILURE,
 
-  EDIT_EVENT_REQUEST = 'EDIT_EVENT_REQUEST',
-  EDIT_EVENT_SUCCESS = 'EDIT_EVENT_SUCCESS',
-  EDIT_EVENT_FAILURE = 'EDIT_EVENT_FAILURE',
+  EDIT_EVENT_REQUEST,
+  EDIT_EVENT_SUCCESS,
+  EDIT_EVENT_FAILURE,
 
-  REMOVE_EVENT_REQUEST = 'REMOVE_EVENT_REQUEST',
-  REMOVE_EVENT_SUCCESS = 'REMOVE_EVENT_SUCCESS',
-  REMOVE_EVENT_FAILURE = 'REMOVE_EVENT_FAILURE',
+  REMOVE_EVENT_REQUEST,
+  REMOVE_EVENT_SUCCESS,
+  REMOVE_EVENT_FAILURE,
 
-  FETCH_EVENT_REQUEST = 'FETCH_EVENT_REQUEST',
-  FETCH_EVENT_SUCCESS = 'FETCH_EVENT_SUCCESS',
-  FETCH_EVENT_FAILURE = 'FETCH_EVENT_FAILURE'
+  FETCH_EVENT_REQUEST,
+  FETCH_EVENT_SUCCESS,
+  FETCH_EVENT_FAILURE
 } from '../actions/types';
 
 const initialState = {
   items: [],
-  isLoading,
-  didInvalidate
+  isLoading: false,
+  didInvalidate: ''
 };
 
-export default (state = initialState, action) {
+export default (state = initialState, action) => {
   switch(action.type) {
     case CREATE_EVENT_REQUEST:
     case FETCH_EVENT_REQUEST:
@@ -45,7 +45,7 @@ export default (state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        items: [...items, action.event]
+        items: [...state.items, action.event]
       };
     case FETCH_EVENT_SUCCESS:
       return {
@@ -66,7 +66,7 @@ export default (state = initialState, action) {
       });
       return {
         ...state,
-        items: [...items, item]
+        items: [...state.items, item]
       };
     case REMOVE_EVENT_SUCCESS:
       const newItems = state.items.filter((event) => event.id !== action.id);

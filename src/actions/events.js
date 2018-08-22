@@ -1,19 +1,19 @@
 import {
-  CREATE_EVENT_REQUEST = 'CREATE_EVENT_REQUEST',
-  CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS',
-  CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE',
+  CREATE_EVENT_REQUEST,
+  CREATE_EVENT_SUCCESS,
+  CREATE_EVENT_FAILURE,
 
-  EDIT_EVENT_REQUEST = 'EDIT_EVENT_REQUEST',
-  EDIT_EVENT_SUCCESS = 'EDIT_EVENT_SUCCESS',
-  EDIT_EVENT_FAILURE = 'EDIT_EVENT_FAILURE',
+  EDIT_EVENT_REQUEST,
+  EDIT_EVENT_SUCCESS,
+  EDIT_EVENT_FAILURE,
 
-  REMOVE_EVENT_REQUEST = 'REMOVE_EVENT_REQUEST',
-  REMOVE_EVENT_SUCCESS = 'REMOVE_EVENT_SUCCESS',
-  REMOVE_EVENT_FAILURE = 'REMOVE_EVENT_FAILURE',
+  REMOVE_EVENT_REQUEST,
+  REMOVE_EVENT_SUCCESS,
+  REMOVE_EVENT_FAILURE,
 
-  FETCH_EVENT_REQUEST = 'FETCH_EVENT_REQUEST',
-  FETCH_EVENT_SUCCESS = 'FETCH_EVENT_SUCCESS',
-  FETCH_EVENT_FAILURE = 'FETCH_EVENT_FAILURE'
+  FETCH_EVENT_REQUEST,
+  FETCH_EVENT_SUCCESS,
+  FETCH_EVENT_FAILURE
 } from './types';
 import api from '../api/api';
 
@@ -29,17 +29,17 @@ export const createEventFailure = (err) => ({
   type: CREATE_EVENT_FAILURE,
   err
 });
-export const createEvent = (date) => async (dispatch, getState) => {
+export const createEvent = (data) => async (dispatch, getState) => {
   try {
-    const uid = getState().auth.uid;
+    const uid = getState().auth.user.uid;
     dispatch(createEventRequest());
-    const key = await api.events.create(uid, date);
-    dispatch(createEventSuccess({
+    const key = await api.events.create(uid, data);
+    return dispatch(createEventSuccess({
       id: key,
-      date
+      ...data
     }));
   } catch(err) {
-    dispatch(createEventFailure(err));
+    return dispatch(createEventFailure(err));
   }
 };
 
@@ -57,12 +57,13 @@ export const fetchEventsFailure = (err) => ({
 });
 export const fetchEvents = () => async (dispatch, getState) => {
   try {
-    const uid = getState().auth.uid;
+    const uid = getState().auth.user.uid;
+    console.log(uid)
     dispatch(fetchEventsRequest());
     const events = await api.events.fetch(uid);
-    dispatch(fetchEventsSuccess(events));
+    return dispatch(fetchEventsSuccess(events));
   } catch(err) {
-    dispatch(fetchEventsFailure(err));
+    return dispatch(fetchEventsFailure(err));
   }
 }
 
@@ -81,12 +82,12 @@ export const editEventFailure = (err) => ({
 });
 export const editEvent = (id, updates) => async (dispatch, getState) => {
   try {
-    const uid = getState().auth.uid;
+    const uid = getState().auth.user.uid;
     dispatch(editEventRequest());
     await api.events.update(uid, id, updates);
-    dispatch(editEventSuccess(id, updates));
+    return dispatch(editEventSuccess(id, updates));
   } catch(err) {
-    dispatch(editEventFailure(err));
+    return dispatch(editEventFailure(err));
   }
 };
 
@@ -104,11 +105,11 @@ export const removeEventFailure = (err) => ({
 });
 export const removeEvent = (id) => async (dispatch, getState) => {
   try {
-    const uid = getState().auth.uid;
+    const uid = getState().auth.user.uid;
     dispatch(removeEventRequest());
     await api.events.delete(uid, id);
-    dispatch(removeEventSuccess(id));
+    return dispatch(removeEventSuccess(id));
   } catch(err) {
-    dispatch(removeEventFailure(err));
+    return dispatch(removeEventFailure(err));
   }
 };

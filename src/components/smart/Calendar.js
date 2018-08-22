@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import dateFns from 'date-fns';
+import _ from 'lodash';
+import { createEvent, removeEvent, editEvent } from '../../actions/events';
 import getAllDates from '../../selectors/getAllDates';
+import Popover from 'react-simple-popover';
 import '../../styles/components/smart/Calendar.css';
 // Components
 import EventsForm from '../forms/EventsForm';
@@ -9,7 +12,10 @@ import EventsForm from '../forms/EventsForm';
 class Calendar extends React.Component {
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date()
+    selectedDate: new Date(),
+    name: '',
+    message: '',
+    open: false
   };
 
   renderHeader() {
@@ -68,18 +74,22 @@ class Calendar extends React.Component {
         formattedDate = dateFns.format(day, dateFormat);
         const cloneDay = day;
         days.push(
-          <div
-            className={`col cell ${
-              !dateFns.isSameMonth(day, monthStart)
-                ? 'disabled'
-                : dateFns.isSameDay(day, selectedDate) ? 'selected' : ''
-            } ${this.props.dates.includes(String(day)) ? 'reserved' : ''}`}
-            key={day}
-            onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
-          >
-            <span className="number">{formattedDate}</span>
-            <span className="bg">{formattedDate}</span>
-          </div>
+            <div
+              ref={this.getRef}
+              className={`col cell ${
+                !dateFns.isSameMonth(day, monthStart)
+                  ? 'disabled'
+                  : dateFns.isSameDay(day, selectedDate) ? 'selected' : ''
+              } ${this.props.dates.includes(String(day)) ? 'reserved' : ''}`}
+              key={day}
+              onClick={(e) => {
+                this.onDateClick(dateFns.parse(cloneDay));
+                this.handleClick();
+              }}
+            >
+              <span className="number">{formattedDate}</span>
+              <span className="bg">{formattedDate}</span>
+            </div>
         );
         day = dateFns.addDays(day, 1);
       }
@@ -90,13 +100,19 @@ class Calendar extends React.Component {
       );
       days = [];
     }
-    return <div className="body">{rows}</div>;
+    return <div className="body">
+      {rows}
+    </div>;
   }
 
   onDateClick = (day) => {
-    this.setState({
-      selectedDate: day
-    });
+    const dayString = day.toString();
+    if (this.props.dates.includes(dayString)) {
+      const name = _.find(this.props.events, {date : dayString}).name;
+      this.setState(() => ({ name, selectedDate: day }));
+    } else {
+      this.setState(() => ({ selectedDate: day, name: '' }));
+    }
   };
 
   nextMonth = () => {
@@ -111,16 +127,73 @@ class Calendar extends React.Component {
     });
   };
 
+  handleChange = (e) => {
+    const {name, value} = e.target;
+    this.setState(() => ({
+      [name]: value
+    }));
+  }
+
+  handleSubmit = (e) => {
+      e.preventDefault();
+      const { selectedDate, name } = this.state;
+      const { createEvent, editEvent, removeEvent, events } = this.props;
+      const selectedDateString = selectedDate.toString();
+
+      const result = new Promise((resolve, reject) => {
+        if (e.target.name === 'add-event' && name) {
+          createEvent({name, date: selectedDateString})
+            .then(() => resolve('Event is successfully created'))
+            .catch(() => reject('Some error occurred'));
+        } else if (e.target.name === 'remove-event') {
+          events.map((event) => {
+            if (event.date === selectedDateString) {
+              removeEvent(event.id)
+                .then(() => resolve('Event is successfully canceled'))
+                .catch(() => reject('Some error occurred'));
+            }
+          });
+        } else if (e.target.name === 'update-event') {
+          events.map((event) => {
+            if (event.date === selectedDateString) {
+              editEvent(event.id, {name, date: selectedDateString})
+                .then(() => resolve('Event is successfully updated'))
+                .catch(() => reject('Some error occurred'));
+            }
+          });
+        }
+      }).then((message) => {
+        this.setState(() => ({ message }));
+      }).catch((message) => {
+        this.setState(() => ({ message }));
+      });
+  }
+
   render() {
-    const { selectedDate } = this.state;
+    const { events, dates } = this.props;
+    const { selectedDate, name } = this.state;
     return (
-      <div className="calendar">
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
-        <EventsForm
-          selectedDate={selectedDate}
-        />
+      <div>
+      {
+        selectedDate ? (
+          <div className="calendar">
+            {this.renderHeader()}
+            {this.renderDays()}
+            {this.renderCells()}
+            <EventsForm
+              selectedDate={selectedDate}
+              name={name}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit}
+              mode={dates.includes(selectedDate.toString()) ? 'edit' : 'create'}
+            />
+          </div>
+        ) : (
+          <div className="alert alert-info" role="alert">
+            Please, select some date.
+          </div>
+        )
+      }
       </div>
     );
   }
@@ -131,4 +204,4 @@ const mapStateToProps = (state) => ({
   dates: getAllDates(state.events.items)
 });
 
-export default connect(mapStateToProps)(Calendar);
+export default connect(mapStateToProps, {createEvent, editEvent, removeEvent})(Calendar);

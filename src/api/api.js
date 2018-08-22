@@ -21,9 +21,9 @@ export default {
         });
         return events;
       }),
-    update: () => (uid, id, updates) =>
-      firebase.database().ref(`users/${uid}/events/${id}`).update(updates).then((event) => event),
-    delete: () => (uid, id) =>
+    update: (uid, id, updates) =>
+      firebase.database().ref(`users/${uid}/events/${id}`).update(updates),
+    delete: (uid, id) =>
       firebase.database().ref(`users/${uid}/events/${id}`).remove().then((ref) => ref)
   }
 };

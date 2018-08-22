@@ -231,3 +231,13 @@ main {
   flex-basis: calc(100%/7);
   width: calc(100%/7);
 }
+
+.popover {
+  position: absolute;
+  top: 0;
+  display: none;
+}
+
+.popover.show {
+  display: block;
+}

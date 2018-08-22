@@ -178,6 +178,10 @@ main {
   border-image-slice: 1;
 }
 
+.calendar .body .reserved {
+  background-color: #40e8e5;
+}
+
 .calendar .body .row {
   border-bottom: 1px solid var(--border-color);
 }
@@ -217,7 +221,7 @@ main {
   letter-spacing: -.07em;
 }
 
-.calendar .body .cell:hover .bg, .calendar .body .selected .bg  {
+.calendar .body .cell:hover .bg, .calendar .body .selected .bg, .calendar .body .reserved .bg  {
   opacity: 0.05;
   transition: .5s ease-in;
 }

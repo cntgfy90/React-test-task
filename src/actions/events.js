@@ -58,7 +58,6 @@ export const fetchEventsFailure = (err) => ({
 export const fetchEvents = () => async (dispatch, getState) => {
   try {
     const uid = getState().auth.user.uid;
-    console.log(uid)
     dispatch(fetchEventsRequest());
     const events = await api.events.fetch(uid);
     return dispatch(fetchEventsSuccess(events));

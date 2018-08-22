@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import dateFns from "date-fns";
+import dateFns from 'date-fns';
+import getAllDates from '../../selectors/getAllDates';
 import '../../styles/components/smart/Calendar.css';
 // Components
 import EventsForm from '../forms/EventsForm';
@@ -65,15 +66,14 @@ class Calendar extends React.Component {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
-        console.log(this.props.events)
         const cloneDay = day;
         days.push(
           <div
             className={`col cell ${
               !dateFns.isSameMonth(day, monthStart)
-                ? "disabled"
+                ? 'disabled'
                 : dateFns.isSameDay(day, selectedDate) ? 'selected' : ''
-            }`}
+            } ${this.props.dates.includes(String(day)) ? 'reserved' : ''}`}
             key={day}
             onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
           >
@@ -127,7 +127,8 @@ class Calendar extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  events: state.events.items
+  events: state.events.items,
+  dates: getAllDates(state.events.items)
 });
 
 export default connect(mapStateToProps)(Calendar);

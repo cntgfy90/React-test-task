@@ -8,7 +8,6 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE
 } from './types';
-import { database } from '../firebase/firebase';
 import api from '../api/api';
 
 export const loginRequest = () => ({

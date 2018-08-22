@@ -1,7 +1,7 @@
 import React from 'react';
 import { firebase } from '../firebase/firebase';
 import { connect } from 'react-redux';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Switch } from 'react-router-dom';
 import { keepUserLoggedIn } from '../actions/auth';
 import { fetchEvents } from '../actions/events';
 import createHistory from 'history/createBrowserHistory';

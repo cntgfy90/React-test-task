@@ -24,7 +24,7 @@ class LoginPage extends React.Component {
       const errors = this.validate(this.state.data);
       this.setState(() => ({ errors }));
       if (_.isEmpty(errors)) {
-        const user = await this.props.login(this.state.data);
+        await this.props.login(this.state.data);
         history.push('/calendar');
       }
     } catch(err) {

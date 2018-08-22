@@ -1,4 +1,4 @@
-import { firebase } from '../firebase/firebase';
+import { firebase, database } from '../firebase/firebase';
 
 export default {
   auth: {
@@ -9,9 +9,9 @@ export default {
   },
   events: {
     create: (uid, data) =>
-      firebase.database().ref(`users/${uid}/events`).push(data).then((ref) => ref.key),
+      database.ref(`users/${uid}/events`).push(data).then((ref) => ref.key),
     fetch: (uid) =>
-      firebase.database().ref(`users/${uid}/events`).once('value').then((snapshot) => {
+      database.ref(`users/${uid}/events`).once('value').then((snapshot) => {
         let events = [];
         snapshot.forEach((childSnapshot) => {
           events.push({
@@ -22,8 +22,8 @@ export default {
         return events;
       }),
     update: (uid, id, updates) =>
-      firebase.database().ref(`users/${uid}/events/${id}`).update(updates),
+      database.ref(`users/${uid}/events/${id}`).update(updates),
     delete: (uid, id) =>
-      firebase.database().ref(`users/${uid}/events/${id}`).remove().then((ref) => ref)
+      database.ref(`users/${uid}/events/${id}`).remove().then((ref) => ref)
   }
 };

@@ -4,7 +4,6 @@ import dateFns from 'date-fns';
 import _ from 'lodash';
 import { createEvent, removeEvent, editEvent } from '../../actions/events';
 import getAllDates from '../../selectors/getAllDates';
-import Popover from 'react-simple-popover';
 import '../../styles/components/smart/Calendar.css';
 // Components
 import EventsForm from '../forms/EventsForm';
@@ -14,8 +13,7 @@ class Calendar extends React.Component {
     currentMonth: new Date(),
     selectedDate: new Date(),
     name: '',
-    message: '',
-    open: false
+    message: ''
   };
 
   renderHeader() {
@@ -136,13 +134,13 @@ class Calendar extends React.Component {
       const { createEvent, editEvent, removeEvent, events } = this.props;
       const selectedDateString = selectedDate.toString();
 
-      const result = new Promise((resolve, reject) => {
+      new Promise((resolve, reject) => {
         if (e.target.name === 'add-event' && name) {
           createEvent({name, date: selectedDateString})
             .then(() => resolve('Event is successfully created'))
             .catch(() => reject('Some error occurred'));
         } else if (e.target.name === 'remove-event') {
-          events.map((event) => {
+          events.forEach((event) => {
             if (event.date === selectedDateString) {
               removeEvent(event.id)
                 .then(() => {
@@ -153,7 +151,7 @@ class Calendar extends React.Component {
             }
           });
         } else if (e.target.name === 'update-event') {
-          events.map((event) => {
+          events.forEach((event) => {
             if (event.date === selectedDateString) {
               editEvent(event.id, {name, date: selectedDateString})
                 .then(() => resolve('Event is successfully updated'))
@@ -174,7 +172,7 @@ class Calendar extends React.Component {
   }
 
   render() {
-    const { events, dates } = this.props;
+    const { dates } = this.props;
     const { selectedDate, name, message } = this.state;
     return (
       <div>

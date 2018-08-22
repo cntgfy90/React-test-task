@@ -75,17 +75,13 @@ class Calendar extends React.Component {
         const cloneDay = day;
         days.push(
             <div
-              ref={this.getRef}
               className={`col cell ${
                 !dateFns.isSameMonth(day, monthStart)
                   ? 'disabled'
                   : dateFns.isSameDay(day, selectedDate) ? 'selected' : ''
               } ${this.props.dates.includes(String(day)) ? 'reserved' : ''}`}
               key={day}
-              onClick={(e) => {
-                this.onDateClick(dateFns.parse(cloneDay));
-                this.handleClick();
-              }}
+              onClick={(e) => this.onDateClick(dateFns.parse(cloneDay))}
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>
@@ -149,7 +145,10 @@ class Calendar extends React.Component {
           events.map((event) => {
             if (event.date === selectedDateString) {
               removeEvent(event.id)
-                .then(() => resolve('Event is successfully canceled'))
+                .then(() => {
+                  this.setState(() => ({ name: '' }));
+                  resolve('Event is successfully canceled')
+                })
                 .catch(() => reject('Some error occurred'));
             }
           });
@@ -167,11 +166,16 @@ class Calendar extends React.Component {
       }).catch((message) => {
         this.setState(() => ({ message }));
       });
+
+      var that = this;
+      setTimeout(() => {
+        that.setState(() => ({ message: ''}));
+      }, 1000)
   }
 
   render() {
     const { events, dates } = this.props;
-    const { selectedDate, name } = this.state;
+    const { selectedDate, name, message } = this.state;
     return (
       <div>
       {
@@ -186,6 +190,7 @@ class Calendar extends React.Component {
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
               mode={dates.includes(selectedDate.toString()) ? 'edit' : 'create'}
+              message={message}
             />
           </div>
         ) : (

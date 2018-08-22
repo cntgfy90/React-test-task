@@ -2,8 +2,15 @@ import React from 'react';
 import dateFns from 'date-fns';
 import '../../styles/components/forms/EventsForm.css';
 
-const EventsForm = ({handleChange, handleSubmit, name, selectedDate, mode='create'}) => (
+const EventsForm = ({handleChange, handleSubmit, name, selectedDate, message, mode='create'}) => (
   <form className="events-form">
+    {
+      message && (
+        <div className="alert alert-primary events-form__message" role="alert">
+          {message}
+        </div>
+      )
+    }
     <div className="form-row events-form__group">
       <div className="col">
         <label htmlFor="event-name">Name</label>

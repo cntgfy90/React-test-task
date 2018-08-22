@@ -10,3 +10,19 @@
 .events-form__btn {
   margin: 0 auto;
 }
+
+.events-form__message {
+  animation: FadeAnimation .5s ease-in .2s forwards;
+}
+
+@keyframes FadeAnimation {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

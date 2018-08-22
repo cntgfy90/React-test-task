@@ -54,19 +54,18 @@ export default (state = initialState, action) => {
         items: [...action.events]
       };
     case EDIT_EVENT_SUCCESS:
-      const item = state.items.map((event) => {
-        if (event.id === action.id) {
-          return {
-            ...event,
-            ...action.updates
-          };
-        } else {
-          return event;
-        }
-      });
       return {
         ...state,
-        items: [...state.items, item]
+        items: state.items.map((event) => {
+          if (event.id === action.id) {
+            return {
+              ...event,
+              ...action.updates
+            };
+          } else {
+            return event
+          }
+        })
       };
     case REMOVE_EVENT_SUCCESS:
       const newItems = state.items.filter((event) => event.id !== action.id);

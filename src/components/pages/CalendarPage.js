@@ -1,10 +1,12 @@
 import React from 'react';
+// Components
+import Calendar from '../smart/Calendar';
 
 class CalendarPage extends React.Component {
   render() {
     return (
       <div>
-        Calendar Page
+        <Calendar />
       </div>
     );
   }
